@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Adote um Pet</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
     <header class="bg-primary text-white p-3">
@@ -12,56 +11,27 @@
             <h1 class="text-center">Adote um Pet</h1>
             <nav class="text-center mt-3">
                 <ul class="nav justify-content-center">
-                    <li class="nav-item"><a class="nav-link text-white" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="/index">Home</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="/adopt">Adote um Pet</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="/contact">Contato</a></li>
                 </ul>
             </nav>
         </div>
     </header>
-
     <main class="container my-5">
         <h2 class="text-center mb-4">Pets Disponíveis para Adoção</h2>
         <div class="row">
-            <!-- Exemplo de um pet -->
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img th:src="@{/images/pets/pet1.jpg}" alt="Foto do Pet" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${pet.nome}">Nome do Pet</h5>
-                        <p class="card-text">Raça: <span th:text="${pet.raca}">Raça do Pet</span></p>
-                        <p class="card-text">Idade: <span th:text="${pet.idade}">Idade do Pet</span></p>
-                        <a th:href="@{/pet_details/{id}(id=${pet.id})}" class="btn btn-primary">Ver Detalhes</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Exemplo de outro pet -->
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img th:src="@{/images/pets/pet2.jpg}" alt="Foto do Pet" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${pet.nome}">Nome do Pet</h5>
-                        <p class="card-text">Raça: <span th:text="${pet.raca}">Raça do Pet</span></p>
-                        <p class="card-text">Idade: <span th:text="${pet.idade}">Idade do Pet</span></p>
-                        <a th:href="@{/pet_details/{id}(id=${pet.id})}" class="btn btn-primary">Ver Detalhes</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Adicione mais cards de pets aqui -->
+            <!-- Cards de pets -->
         </div>
         <p class="text-center">
-            <a href="/adoption_form" class="btn btn-primary">Comece a Adoção</a>
+            <a href="/adoption" class="btn btn-primary">Comece a Adoção</a>
         </p>
     </main>
-
     <footer class="bg-light py-3">
         <div class="container text-center">
             <p>&copy; 2024 Sistema de Adoção de Pets</p>
         </div>
     </footer>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
