@@ -2,13 +2,11 @@ package com.helppet.PetHelper.service;
 
 import com.helppet.PetHelper.entity.PetData;
 import com.helppet.PetHelper.repository.PetRepository;
+import com.helppet.PetHelper.util.Upload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,38 +16,6 @@ public class PetService {
     @Autowired
     private PetRepository petRepository;
 
-    private final String FOLDER_PATH = "PetHelper/src/main/resources/static/imagens/";
-
-    // Upload image
-    public String uploadImageToFileSystem(MultipartFile file) throws IOException {
-        String filePath = FOLDER_PATH + file.getOriginalFilename();
-
-        PetData petData = petRepository.save(PetData.builder()
-                .nome(file.getOriginalFilename())
-                .type(file.getContentType())
-                .filePath(filePath)
-                .build());
-
-        file.transferTo(new File(filePath)); // Saves the file to disk
-
-        if (petData != null) {
-            return "File uploaded successfully: " + filePath;
-        }
-        return "File upload failed.";
-    }
-
-    // Download image
-    public byte[] downloadImageFromFileSystem(String fileName) throws IOException {
-        Optional<PetData> petData = petRepository.findByNome(fileName);
-
-        if (petData.isPresent()) {
-            String filePath = petData.get().getFilePath();  // Fetch file path from DB
-            return Files.readAllBytes(new File(filePath).toPath());  // Return file as byte array
-        }
-
-        throw new IOException("File not found with name: " + fileName);
-    }
-
     // List all pets
     public List<PetData> listarTodos() {
         return petRepository.findAll();
@@ -58,21 +24,40 @@ public class PetService {
     // Get pet by ID
     public PetData buscarPorId(Long id) {
         Optional<PetData> pet = petRepository.findById(id);
-        return pet.orElse(null); // Return null if the pet is not found
+        return pet.orElse(null);
     }
 
-    // Create a new pet
-    public PetData criarPet(PetData pet) {
-        return petRepository.save(pet); // Fixed typo: using petRepository
+    // Create a new pet with image upload
+    public PetData criarPetComImagem(PetData pet, MultipartFile imagem) throws Exception {
+        boolean uploadSucesso = Upload.fazerUploadImagem(imagem);
+        
+        if (uploadSucesso) {
+            String nomeArquivo = imagem.getOriginalFilename();
+            pet.setFilePath(nomeArquivo);  // Store the file path in the PetData entity
+            return petRepository.save(pet);
+        } else {
+            throw new Exception("Erro ao fazer upload da imagem");
+        }
     }
 
     // Update existing pet
-    public PetData atualizarPet(Long id, PetData pet) {
+    public PetData atualizarPet(Long id, PetData pet, MultipartFile imagem) throws Exception {
         if (petRepository.existsById(id)) {
-            pet.setId(id); // Ensure the ID is not changed
+            pet.setId(id);
+
+            // If a new image is provided, upload it and set the file path
+            if (imagem != null && !imagem.isEmpty()) {
+                boolean uploadSucesso = Upload.fazerUploadImagem(imagem);
+                if (uploadSucesso) {
+                    pet.setFilePath(imagem.getOriginalFilename());
+                } else {
+                    throw new Exception("Erro ao fazer upload da imagem");
+                }
+            }
+
             return petRepository.save(pet);
         }
-        return null; // Return null if the pet is not found
+        return null;
     }
 
     // Delete pet by ID
