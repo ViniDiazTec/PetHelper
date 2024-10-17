@@ -18,24 +18,34 @@ public class ControllerRest {
     @Autowired
     private PetService servicePet;
 
-    // Returns the list of all pets
     @GetMapping("/listar")
     public ResponseEntity<List<PetData>> getAllPets() {
         List<PetData> pets = servicePet.listarTodos();
         return new ResponseEntity<>(pets, HttpStatus.OK);
     }
 
-    // Returns a pet by ID
     @GetMapping("/pesquisar/{id}")
     public ResponseEntity<PetData> getPetById(@PathVariable Long id) {
         PetData pet = servicePet.buscarPorId(id);
         return pet != null ? new ResponseEntity<>(pet, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    // Add a new pet with image upload
-@PostMapping("/adicionar")
-public ResponseEntity<PetData> addPet(@ModelAttribute PetData pet, 
-                                      @RequestPart("file") MultipartFile file) {
+ @PostMapping("/adicionar")
+public ResponseEntity<PetData> addPet(
+        @RequestParam("nome") String nome,
+        @RequestParam("raca") String raca,
+        @RequestParam("idade") Integer idade,
+        @RequestParam("descricao") String descricao,
+        @RequestParam("type") String type,
+        @RequestPart("file") MultipartFile file) {
+    
+    PetData pet = new PetData();
+    pet.setNome(nome);
+    pet.setRaca(raca);
+    pet.setIdade(idade);
+    pet.setDescricao(descricao);
+    pet.setType(type);
+
     try {
         PetData novoPet = servicePet.criarPetComImagem(pet, file);
         return new ResponseEntity<>(novoPet, HttpStatus.CREATED);
@@ -43,7 +53,7 @@ public ResponseEntity<PetData> addPet(@ModelAttribute PetData pet,
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
-    // Update an existing pet with optional image upload
+
     @PutMapping("/atualizar/{id}")
     public ResponseEntity<PetData> atualizarPet(@PathVariable Long id, 
                                                 @Valid @RequestPart("pet") PetData pet,
@@ -56,7 +66,6 @@ public ResponseEntity<PetData> addPet(@ModelAttribute PetData pet,
         }
     }
 
-    // Delete a pet by ID
     @DeleteMapping("/deletar/{id}")
     public ResponseEntity<Void> deletarPet(@PathVariable Long id) {
         PetData pet = servicePet.buscarPorId(id);

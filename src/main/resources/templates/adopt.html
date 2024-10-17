@@ -25,13 +25,13 @@
             <!-- Itera sobre a lista de pets e exibe cada um em um card -->
             <div class="col-md-4 mb-4" th:each="pet : ${pets}">
                 <div class="card">
-                    <img src="/imagens/${pet.imagem}" alt="Imagem do pet" />
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${pet.nome}">Nome do Pet</h5>
-                        <p class="card-text">Raça: <span th:text="${pet.raca}">Raça do Pet</span></p>
-                        <p class="card-text">Idade: <span th:text="${pet.idade}">Idade do Pet</span></p>
-                        <a th:href="@{/details/{id}(id=${pet.id})}" class="btn btn-primary">Ver Detalhes</a>
-                    </div>
+        <img th:src="@{/imagens/{filePath}(filePath=${pet.filePath})}" alt="Imagem do pet" class="card-img-top" />
+        <div class="card-body">
+            <h5 class="card-title" th:text="${pet.nome}">Nome do Pet</h5>
+            <p class="card-text">Raça: <span th:text="${pet.raca}">Raça do Pet</span></p>
+            <p class="card-text">Idade: <span th:text="${pet.idade}">Idade do Pet</span></p>
+            <a th:href="@{/details/{id}(id=${pet.id})}" class="btn btn-primary">Ver Detalhes</a>
+        </div>
                 </div>
             </div>
         </div>

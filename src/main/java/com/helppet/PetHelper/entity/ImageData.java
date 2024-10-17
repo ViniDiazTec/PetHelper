@@ -1,7 +1,5 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.helppet.PetHelper.entity;
 
 import jakarta.persistence.Column;
@@ -36,3 +34,4 @@ public class ImageData {
     private byte [] imageData;
 
 }
+*/

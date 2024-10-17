@@ -17,59 +17,47 @@ import java.util.List;
 public class ControllerView {
 
     @Autowired
-    private RestTemplate restTemplate;  // Bean for RestTemplate
+    private RestTemplate restTemplate;
 
-    // Endpoint to show the index page
     @GetMapping("/index")
     public String showIndexPage() {
-        return "index";  // Maps to src/main/resources/templates/index.html
+        return "index";
     }
 
-    // Displays the adoption page and loads the list of pets from the REST controller
     @GetMapping("/adopt")
     public String showAdoptPage(Model model) {
-        String url = "http://localhost:8080/api/pets/listar";  // REST API endpoint
+        String url = "http://localhost:8080/api/pets/listar";
 
         try {
-            // Fetch the list of pets from the REST API
             ResponseEntity<PetData[]> response = restTemplate.getForEntity(url, PetData[].class);
-
-            // Check if the response has a valid status and body
-            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
-                List<PetData> pets = Arrays.asList(response.getBody());  // Convert array to list
-                model.addAttribute("pets", pets);  // Add pets to the model for Thymeleaf rendering
-            } else {
-                model.addAttribute("pets", List.of());  // Add an empty list if no pets are returned
-            }
+            List<PetData> pets = (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) 
+                ? Arrays.asList(response.getBody()) 
+                : List.of();
+            model.addAttribute("pets", pets);
         } catch (RestClientException e) {
-            // Handle any exceptions during the REST call (e.g., service unavailable)
             model.addAttribute("error", "Unable to load pets. Please try again later.");
         }
 
-        return "adopt";  // Renders the adopt.html template
+        return "adopt";
     }
 
-    // Endpoint to show the adoption form page
     @GetMapping("/adoption")
     public String showAdoptionPage() {
-        return "adoption_form";  // Maps to src/main/resources/templates/adoption_form.html
+        return "adoption_form";
     }
 
-    // Endpoint to show the pet details page
     @GetMapping("/details")
     public String showDetailsPage() {
-        return "details";  // Maps to src/main/resources/templates/details.html
+        return "details";
     }
 
-    // Endpoint to show the contact page
     @GetMapping("/contact")
     public String showContactPage() {
-        return "contact";  // Maps to src/main/resources/templates/contact.html
+        return "contact";
     }
 
-    // Endpoint to show the pet registration (cadastro) page
     @GetMapping("/cadastro")
     public String showCadastroPage() {
-        return "cadastro_pet";  // Maps to src/main/resources/templates/cadastro_pet.html
+        return "cadastro_pet";
     }
 }
