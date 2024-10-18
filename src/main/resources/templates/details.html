@@ -20,17 +20,17 @@
         </div>
     </header>
 
-    <main class="container my-5">
-        <div class="pet-details text-center">
-            <img th:src="@{/images/pets/}" alt="Foto do Pet" class="pet-photo img-fluid mb-4">
-            <h2 th:text="${pet.nome}">Nome do Pet</h2>
-            <p>Raça: <span th:text="${pet.raca}">Raça do Pet</span></p>
-            <p>Idade: <span th:text="${pet.idade}">Idade do Pet</span></p>
-            <p>Descrição: <span th:text="${pet.descricao}">Descrição do Pet</span></p>
-            <a href="/adoption_form" class="btn btn-primary">Adotar este Pet</a>
-        </div>
-    </main>
-
+<main class="container my-5">
+    <div class="pet-details text-center">
+        <img th:src="@{/imagens/{filePath}(filePath=${pet.filePath})}" alt="Foto do Pet" class="pet-photo img-fluid mb-4">
+        <h2 th:text="${pet.nome}">Nome do Pet</h2>
+        <p>Raça: <span th:text="${pet.raca}">Raça do Pet</span></p>
+        <p>Idade: <span th:text="${pet.idade}">Idade do Pet</span></p>
+        <p>Descrição: <span th:text="${pet.descricao}">Descrição do Pet</span></p>
+        <p>Tipo de Arquivo: <span th:text="${pet.type}">Tipo do Arquivo</span></p> <!-- Campo Type Adicionado -->
+         <a th:href="@{/adoption}" class="btn btn-primary">Adotar este Pet</a> <!-- Redireciona para /adoption -->
+    </div>
+</main>
     <footer class="bg-light py-3">
         <div class="container text-center">
             <p>&copy; 2024 Sistema de Adoção de Pets</p>

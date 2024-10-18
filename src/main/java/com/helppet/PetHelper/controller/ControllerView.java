@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.List;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class ControllerView {
@@ -40,6 +41,24 @@ public class ControllerView {
 
         return "adopt";
     }
+    
+@GetMapping("/details/{id}")
+public String detalhesPet(@PathVariable Long id, Model model) {
+    String url = "http://localhost:8080/api/pets/pesquisar/" + id;
+    
+    try {
+        ResponseEntity<PetData> response = restTemplate.getForEntity(url, PetData.class);
+        if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+            PetData pet = response.getBody();
+            model.addAttribute("pet", pet);
+            return "details"; // Nome da página HTML
+        } else {
+            return "redirect:/error";
+        }
+    } catch (RestClientException e) {
+        return "redirect:/error"; // Trata o erro de conexão ou de API
+    }
+}
 
     @GetMapping("/adoption")
     public String showAdoptionPage() {
